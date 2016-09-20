@@ -113,6 +113,8 @@ public class vHelp extends JavaPlugin implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPreProcess(PlayerCommandPreprocessEvent e) {
 	String msg = e.getMessage().toLowerCase();
+	msg = msg.substring(1);
+	System.out.println(msg);
 
 	if (msg.indexOf(" ") != -1) {
 	    msg = msg.substring(0, msg.indexOf(" "));
