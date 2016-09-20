@@ -6,19 +6,16 @@ package com.perceivedev.vhelp;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class vHelp extends JavaPlugin implements Listener {
@@ -94,13 +91,13 @@ public class vHelp extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-	label = command.getLabel().toLowerCase();
+	label = command.getName();
 
-	if (label.equals("help")) {
+	if (label.equalsIgnoreCase("help") && sender != Bukkit.getConsoleSender()) {
 	    if (!handleHelp(sender, args)) {
 		msg(sender, usageHelp);
 	    }
-	} else if (label.equals("vhelp")) {
+	} else if (label.equalsIgnoreCase("vhelp")) {
 	    if (!handleVHelp(sender, args)) {
 		msg(sender, usageVHelp);
 	    }
@@ -110,33 +107,42 @@ public class vHelp extends JavaPlugin implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPreProcess(PlayerCommandPreprocessEvent e) {
-	String msg = e.getMessage().toLowerCase();
-	msg = msg.substring(1);
-	System.out.println(msg);
-
-	if (msg.indexOf(" ") != -1) {
-	    msg = msg.substring(0, msg.indexOf(" "));
-	}
-
-	if (msg.equals("help") || msg.equals("vhelp") || msg.equals("?")) {
-	    String[] args = e.getMessage().split(" ");
-	    if (args.length == 1) {
-		args = new String[0];
-	    } else {
-		args = Arrays.copyOfRange(args, 1, args.length);
-	    }
-	    onCommand(e.getPlayer(), getCommand(msg), msg, Arrays.copyOfRange(e.getMessage().split(" "), 1, e.getMessage().split(" ").length));
-	}
-    }
+    // @EventHandler(priority = EventPriority.HIGHEST)
+    // public void onPreProcess(PlayerCommandPreprocessEvent e) {
+    // String msg = e.getMessage().toLowerCase().substring(1);
+    //
+    // if (msg.indexOf(" ") != -1) {
+    // msg = msg.substring(0, msg.indexOf(" "));
+    // }
+    //
+    // System.out.println(msg);
+    //
+    // if (msg.equals("help") || msg.equals("vhelp") || msg.equals("?")) {
+    // System.out.println("Yay");
+    // String[] args = e.getMessage().split(" ");
+    // if (args.length == 1) {
+    // args = new String[0];
+    // } else {
+    // args = Arrays.copyOfRange(args, 1, args.length);
+    // }
+    // System.out.println("#args = " + args.length);
+    // onCommand(e.getPlayer(), getCommand(msg), msg, Arrays.copyOfRange(e.getMessage().split(" "), 1,
+    // e.getMessage().split(" ").length));
+    // }
+    // }
 
     private boolean handleHelp(CommandSender sender, String[] args) {
+
+	if (!sender.hasPermission("vHelp.help")) {
+	    msg(sender, "&cYou don't have permission to do that");
+	    return true;
+	}
 
 	Object[] valid = pages.stream().filter(s -> sender.hasPermission(s.getPermission())).toArray();
 
 	if (valid.length < 1) {
-	    return false;
+	    msg(sender, "&cNo help pages were found for you");
+	    return true;
 	}
 
 	int page = 0;
@@ -156,6 +162,11 @@ public class vHelp extends JavaPlugin implements Listener {
     }
 
     private boolean handleVHelp(CommandSender sender, String[] args) {
+
+	if (!sender.hasPermission("vHelp.admin")) {
+	    msg(sender, "&cYou don't have permission to do that");
+	    return true;
+	}
 
 	if (args.length < 1) {
 	    msg(sender, "&7This server is running &b" + versionText());

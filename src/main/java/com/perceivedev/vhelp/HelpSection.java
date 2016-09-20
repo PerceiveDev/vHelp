@@ -6,6 +6,7 @@ package com.perceivedev.vhelp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -69,10 +70,18 @@ public class HelpSection {
     public void display(CommandSender sender, int page) {
 
 	page = page == 0 ? page : page - 1;
+	if (page >= pages.size()) {
+	    msg(sender, "&cPage " + (page + 1) + " does not exist");
+	    return;
+	}
 	page = page < pages.size() ? page : 0;
-	
+
 	pages.get(page).display(sender);
 
+    }
+
+    private void msg(CommandSender sender, String msg) {
+	sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
     }
 
 }
