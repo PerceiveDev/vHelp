@@ -105,7 +105,7 @@ public class vHelp extends JavaPlugin {
 
     private boolean handleHelp(CommandSender sender, String[] args) {
 
-	HelpSection[] valid = (HelpSection[]) pages.stream().filter(s -> sender.hasPermission(s.getPermission())).toArray();
+	Object[] valid = pages.stream().filter(s -> sender.hasPermission(s.getPermission())).toArray();
 
 	if (valid.length < 1) {
 	    return false;
@@ -113,7 +113,7 @@ public class vHelp extends JavaPlugin {
 
 	int page = 0;
 
-	if (args.length > 1) {
+	if (args.length >= 1) {
 	    try {
 		page = Integer.valueOf(args[0]);
 	    } catch (NumberFormatException e) {
@@ -121,7 +121,7 @@ public class vHelp extends JavaPlugin {
 	    }
 	}
 
-	valid[valid.length - 1].display(sender, page);
+	((HelpSection) valid[valid.length - 1]).display(sender, page);
 
 	return true;
 

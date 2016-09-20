@@ -3,10 +3,11 @@ main: com.perceivedev.vhelp.vHelp
 version: 1.0
 description: A custom help plugin that shows different help pages based on the player's permission
 author: [Rayzr,EndureBlackout]
+softdepend: [Essentials]
 commands:
   help:
     description: Help command
-    aliases: ?
+    aliases: "?"
     usage: "/help [page]"
   vHelp:
     description: vHelp management command
