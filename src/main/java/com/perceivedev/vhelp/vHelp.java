@@ -120,7 +120,11 @@ public class vHelp extends JavaPlugin implements Listener {
 
 	if (msg.equals("help") || msg.equals("vhelp") || msg.equals("?")) {
 	    String[] args = e.getMessage().split(" ");
-	    args = Arrays.copyOfRange(args, 1, args.length);
+	    if (args.length == 1) {
+		args = new String[0];
+	    } else {
+		args = Arrays.copyOfRange(args, 1, args.length);
+	    }
 	    onCommand(e.getPlayer(), getCommand(msg), msg, Arrays.copyOfRange(e.getMessage().split(" "), 1, e.getMessage().split(" ").length));
 	}
     }
