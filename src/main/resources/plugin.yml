@@ -9,6 +9,6 @@ commands:
     description: Help command
     aliases: "?"
     usage: "/help [page]"
-  vHelp:
+  vhelp:
     description: vHelp management command
     usage: "/vHelp [reload]"

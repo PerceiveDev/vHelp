@@ -6,6 +6,7 @@ package com.perceivedev.vhelp;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -14,9 +15,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class vHelp extends JavaPlugin {
+public class vHelp extends JavaPlugin implements Listener {
 
     private Logger logger;
 
@@ -30,6 +35,8 @@ public class vHelp extends JavaPlugin {
     public void onEnable() {
 
 	logger = getLogger();
+
+	getServer().getPluginManager().registerEvents(this, this);
 
 	load();
 
@@ -101,6 +108,21 @@ public class vHelp extends JavaPlugin {
 
 	return true;
 
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPreProcess(PlayerCommandPreprocessEvent e) {
+	String msg = e.getMessage().toLowerCase();
+
+	if (msg.indexOf(" ") != -1) {
+	    msg = msg.substring(0, msg.indexOf(" "));
+	}
+
+	if (msg.equals("help") || msg.equals("vhelp") || msg.equals("?")) {
+	    String[] args = e.getMessage().split(" ");
+	    args = Arrays.copyOfRange(args, 1, args.length);
+	    onCommand(e.getPlayer(), getCommand(msg), msg, Arrays.copyOfRange(e.getMessage().split(" "), 1, e.getMessage().split(" ").length));
+	}
     }
 
     private boolean handleHelp(CommandSender sender, String[] args) {
