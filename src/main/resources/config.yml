@@ -1,0 +1,24 @@
+usage:
+    help: "&cDo /help or /? to view help"
+    vhelp: "&c/vhelp [reload]"
+pages:
+    n00bs:
+        permission: vHelp.n00b
+        page1:
+        - "Hello"
+        - "This is help"
+        - "Blah blah blah"
+        - "&7Do /help 2 to view more"
+        page2:
+        - "Even more"
+        - "yay"
+    admins:
+        permission: vHelp.admin
+        one:
+        - "Hello"
+        - "This is &6admin help"
+        - "Blah blah blah"
+        - "&7Do /help 2 to view more"
+        two:
+        - "Even more"
+        - "yay &4ADMINS"
