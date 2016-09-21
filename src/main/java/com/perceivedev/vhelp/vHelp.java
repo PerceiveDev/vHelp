@@ -136,29 +136,30 @@ public class vHelp extends JavaPlugin implements Listener {
 	if (!sender.hasPermission("vHelp.help")) {
 	    msg(sender, "&cYou don't have permission to do that");
 	    return true;
-	}
+	} else {
 
-	Object[] valid = pages.stream().filter(s -> sender.hasPermission(s.getPermission())).toArray();
-
-	if (valid.length < 1) {
-	    msg(sender, "&cNo help pages were found for you");
-	    return true;
-	}
-
-	int page = 0;
-
-	if (args.length >= 1) {
-	    try {
-		page = Integer.valueOf(args[0]);
-	    } catch (NumberFormatException e) {
-		// Ignore
+		Object[] valid = pages.stream().filter(s -> sender.hasPermission(s.getPermission())).toArray();
+	
+		if (valid.length < 1) {
+		    msg(sender, "&cNo help pages were found for you");
+		    return true;
+		}
+	
+		int page = 0;
+	
+		if (args.length >= 1) {
+		    try {
+			page = Integer.valueOf(args[0]);
+		    } catch (NumberFormatException e) {
+			// Ignore
+		    }
+		}
+	
+		((HelpSection) valid[valid.length - 1]).display(sender, page);
+	
+		return true;
+	
 	    }
-	}
-
-	((HelpSection) valid[valid.length - 1]).display(sender, page);
-
-	return true;
-
     }
 
     private boolean handleVHelp(CommandSender sender, String[] args) {
